@@ -45,7 +45,7 @@ public class QuestionController {
         return ResponseEntity.status(CREATED).body(createdQuestion);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/question/update/{id}")
     public ResponseEntity<Question> updateQuestion(@PathVariable Long id,
             @RequestBody Question question) throws ChangeSetPersister.NotFoundException {
         Question updatedQuestion = questionService.updateQuestion(id, question);
@@ -72,7 +72,7 @@ public class QuestionController {
         return ResponseEntity.ok(randomQuestions);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("question/delete/{id}")
     public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
         questionService.deleteQuestion(id);
         return ResponseEntity.noContent().build();

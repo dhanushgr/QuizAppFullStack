@@ -40,3 +40,32 @@ export const getAllSubjects = async() =>{
         console.error(error)
     }
 }
+
+export const updateQuestions = async(id, question) =>{
+    try {
+        const response = await api.put(`/question/update/${id}`, question)
+        return response.data
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const getQuestionById = async(id) =>{
+    try {
+        const response = await api.get(`/question/${id}`)
+        return response.data
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const deleteQuestion = async(id) =>{
+    try {
+        const response = await api.delete(`question/delete/${id}`)
+        return response.data
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+
