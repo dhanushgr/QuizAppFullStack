@@ -23,14 +23,8 @@ public class QuestionController {
 
     private final IQuestionService questionService;
 
-    @PostMapping("/create-new-question")
-    public ResponseEntity<Question> createQuestion(@Valid @RequestBody Question question){
-        Question createdQuestion = questionService.createQuestion(question);
-        return ResponseEntity.status(CREATED).body(createdQuestion);
-    }
-
     @GetMapping("/all-questions")
-    public ResponseEntity<List<Question>> getAllQuestions(){
+    public ResponseEntity<List<Question>> getAllQuestions() {
         List<Question> questions = questionService.getAllQuestions();
         return ResponseEntity.ok(questions);
     }
@@ -38,37 +32,36 @@ public class QuestionController {
     @GetMapping("/question/{id}")
     public ResponseEntity<Question> getQuestionById(@PathVariable Long id) throws ChangeSetPersister.NotFoundException {
         Optional<Question> theQuestion = questionService.getQuestionById(id);
-        if(theQuestion.isPresent()){
+        if (theQuestion.isPresent()) {
             return ResponseEntity.ok(theQuestion.get());
-        }else {
+        } else {
             throw new ChangeSetPersister.NotFoundException();
         }
     }
 
-    @PutMapping("/{id}/update")
+    @PostMapping("/create-new-question")
+    public ResponseEntity<Question> createQuestion(@Valid @RequestBody Question question) {
+        Question createdQuestion = questionService.createQuestion(question);
+        return ResponseEntity.status(CREATED).body(createdQuestion);
+    }
+
+    @PutMapping("/update/{id}")
     public ResponseEntity<Question> updateQuestion(@PathVariable Long id,
-                                                   @RequestBody Question question) throws ChangeSetPersister.NotFoundException {
+            @RequestBody Question question) throws ChangeSetPersister.NotFoundException {
         Question updatedQuestion = questionService.updateQuestion(id, question);
         return ResponseEntity.ok(updatedQuestion);
     }
 
-    @DeleteMapping("/{id}/delete")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id){
-        questionService.deleteQuestion(id);
-        return ResponseEntity.noContent().build();
-    }
-
     @GetMapping("/subjects")
-    public ResponseEntity<List<String>> getAllSubjects(){
+    public ResponseEntity<List<String>> getAllSubjects() {
         List<String> subjects = questionService.getAllSubjects();
         return ResponseEntity.ok(subjects);
     }
 
     @GetMapping("/fetch-questions-for-user")
     public ResponseEntity<List<Question>> getQuestionsForUser(
-            @RequestParam Integer numOfQuestions, @RequestParam String subject){
-        List<Question> allQuestions =
-                questionService.getQuestionsForUser(numOfQuestions, subject);
+            @RequestParam Integer numOfQuestions, @RequestParam String subject) {
+        List<Question> allQuestions = questionService.getQuestionsForUser(numOfQuestions, subject);
         List<Question> mutableQuestions = new ArrayList<>(allQuestions);
         Collections.shuffle(mutableQuestions);
 
@@ -78,4 +71,11 @@ public class QuestionController {
 
         return ResponseEntity.ok(randomQuestions);
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
+        questionService.deleteQuestion(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
