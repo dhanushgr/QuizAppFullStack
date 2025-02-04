@@ -21,7 +21,6 @@ function App() {
 					<Route path="/quiz-stepper" element={<QuizStepper />} />
 					<Route path="/take-quiz" element={<Quiz />} />
 					<Route path="/admin" element={<Admin />} />
-
 					<Route path="/create-quiz" element={<AddQuestion />} />
 					<Route path="/update-quiz/:id" element={<UpdateQuestion />} />
 					<Route path="/all-quizzes" element={<GetAllQuiz />} />

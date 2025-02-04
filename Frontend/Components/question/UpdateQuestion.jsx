@@ -55,8 +55,7 @@ const UpdateQuestion = () => {
 					.map((answer) => answer.trim())
 			}
 			await updateQuestion(id, updatedQuestion)
-            /**Todo: naviage back to all questions page 
-			navigate("/all-quizzes") */
+			navigate("/all-quizzes") 
 		} catch (error) {
 			console.error(error)
 		}
@@ -108,11 +107,6 @@ const UpdateQuestion = () => {
 						<button type="submit" className="btn btn-sm btn-outline-warning">
 							Update question
 						</button>
-                        {/** TODO: add a link back to all questions
-                        <Link to={"/all-quizzes"} className="btn btn-outline-primary ml-2">
-							Back to all questions
-						</Link>
-                         */}
 						<Link to={"/all-quizzes"} className="btn btn-outline-primary ml-2">
 							Back to all questions
 						</Link>
