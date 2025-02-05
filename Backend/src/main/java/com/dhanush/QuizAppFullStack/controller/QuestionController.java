@@ -2,7 +2,6 @@ package com.dhanush.QuizAppFullStack.controller;
 
 import com.dhanush.QuizAppFullStack.model.Question;
 import com.dhanush.QuizAppFullStack.service.IQuestionService;
-import com.dhanush.QuizAppFullStack.service.QuestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -18,6 +17,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping("/api/quiz")
+@CrossOrigin(origins = "http://localhost:5173") // Enable CORS for frontend
 @RequiredArgsConstructor // does the constructor injection
 public class QuestionController {
 
@@ -77,5 +77,4 @@ public class QuestionController {
         questionService.deleteQuestion(id);
         return ResponseEntity.noContent().build();
     }
-
 }
