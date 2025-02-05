@@ -4,9 +4,9 @@ export const api = axios.create({
 	baseURL: "http://localhost:9192/api/quiz"
 })
 
-export const createQuestion = async(quizQustion) =>{
+export const createQuestion = async(quizQuestion) =>{
   try {
-    const response = await api.post("/create-new-question", quizQustion)
+    const response = await api.post("/create-new-question", quizQuestion)
     return response.data
   } catch (error) {
     console.error(error)
@@ -15,7 +15,7 @@ export const createQuestion = async(quizQustion) =>{
 
 export const getAllQuestions = async() =>{
   try {
-    const response = await api.get("/all-questions")    
+    const response = await api.get("/all-questions")
     return response.data
   } catch (error) {
     console.error(error)
@@ -46,7 +46,7 @@ export const getSubjects = async() =>{
 
 export const updateQuestion = async(id, question) =>{
   try {
-    const response = await api.put(`/question/${id}/update`, question)
+    const response = await api.put(`/question/update/${id}`, question)
     return response.data
   } catch (error) {
     console.error(error)
@@ -64,7 +64,7 @@ export const getQuestionById = async(id) =>{
 
 export const deleteQuestion = async(id) =>{
   try {
-    const response = await api.delete(`/question/${id}/delete`)
+    const response = await api.delete(`/question/delete/${id}`)
 		return response.data
   } catch (error) {
     console.error(error)
