@@ -72,7 +72,7 @@ public class QuestionController {
         return ResponseEntity.ok(randomQuestions);
     }
 
-    @DeleteMapping("question/delete/{id}")
+    @DeleteMapping("/question/delete/{id}")
     public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
         questionService.deleteQuestion(id);
         return ResponseEntity.noContent().build();
