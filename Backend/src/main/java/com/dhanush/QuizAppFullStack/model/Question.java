@@ -3,38 +3,48 @@
     we should create a seperate table for choices and correctAnswers in the
     database
  */
-
-package com.dhanush.QuizAppFullStack.model;
-
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.List;
-
-
-@Getter
-@Setter
-@Entity
-public class Question {
-
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @NotBlank(message = "Please provide a Question statement")
-    private String question;
-    @NotBlank(message = "Please provide under which subject this question is gonna fall into")
-    private String subject;
-    @NotBlank(message = "Please provide does this question have a single answer or multiple answers")
-    private String questionType;    //single answer(radio) or multiple answer(checkbox)
-
-    @NotBlank(message = "Please provide the choices of anwers")
-    @ElementCollection //used for mapping of strings, this creates a seperate
-    // table for this attribute
-    private List<String> choices;
-
-    @NotBlank(message = "Please provide atleast one correct answer for the question")
-    @ElementCollection
-    private List<String> correctAnswers;
-
-}
+ package com.dhanush.QuizAppFullStack.model;
+ 
+ import jakarta.persistence.*;
+ import jakarta.validation.constraints.NotBlank;
+ import jakarta.validation.constraints.NotEmpty;
+ import jakarta.validation.constraints.Size;
+ import lombok.Getter;
+ import lombok.Setter;
+ 
+ import java.util.List;
+ 
+ @Getter
+ @Setter
+ @Entity
+ @Table(name = "questions")
+ public class Question {
+ 
+     @Id
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
+     private Long id;
+ 
+     @NotBlank(message = "Please provide a question statement")
+     @Column(nullable = false)
+     private String question;
+ 
+     @NotBlank(message = "Please provide the subject for this question")
+     @Column(nullable = false)
+     private String subject;
+ 
+     @Enumerated(EnumType.STRING)
+     @Column(nullable = false)
+     private QuestionType questionType; // Enum instead of String for safety
+ 
+     @NotEmpty(message = "Please provide at least two choices")
+     @Size(min = 2, message = "A question must have at least two choices")
+     @ElementCollection
+     @CollectionTable(name = "question_choices", joinColumns = @JoinColumn(name = "question_id"))
+     private List<String> choices;
+ 
+     @NotEmpty(message = "Please provide at least one correct answer")
+     @ElementCollection
+     @CollectionTable(name = "question_correct_answers", joinColumns = @JoinColumn(name = "question_id"))
+     private List<String> correctAnswers;
+ }
+ 

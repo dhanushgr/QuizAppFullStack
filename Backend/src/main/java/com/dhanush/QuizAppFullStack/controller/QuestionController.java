@@ -4,77 +4,66 @@ import com.dhanush.QuizAppFullStack.model.Question;
 import com.dhanush.QuizAppFullStack.service.IQuestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping("/api/quiz")
-@CrossOrigin(origins = "http://localhost:5173") // Enable CORS for frontend
-@RequiredArgsConstructor // does the constructor injection
+@RequiredArgsConstructor
 public class QuestionController {
 
     private final IQuestionService questionService;
 
-    @GetMapping("/all-questions")
+    // Fetch all questions
+    @GetMapping("/questions")
     public ResponseEntity<List<Question>> getAllQuestions() {
-        List<Question> questions = questionService.getAllQuestions();
-        return ResponseEntity.ok(questions);
+        return ResponseEntity.ok(questionService.getAllQuestions());
     }
 
-    @GetMapping("/question/{id}")
-    public ResponseEntity<Question> getQuestionById(@PathVariable Long id) throws ChangeSetPersister.NotFoundException {
-        Optional<Question> theQuestion = questionService.getQuestionById(id);
-        if (theQuestion.isPresent()) {
-            return ResponseEntity.ok(theQuestion.get());
-        } else {
-            throw new ChangeSetPersister.NotFoundException();
-        }
+    // Fetch a question by ID
+    @GetMapping("/questions/{id}")
+    public ResponseEntity<Question> getQuestionById(@PathVariable Long id) {
+        Question question = questionService.getQuestionById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Question not found"));
+        return ResponseEntity.ok(question);
     }
 
-    @PostMapping("/create-new-question")
+    // Create a new question
+    @PostMapping("/questions")
     public ResponseEntity<Question> createQuestion(@Valid @RequestBody Question question) {
-        Question createdQuestion = questionService.createQuestion(question);
-        return ResponseEntity.status(CREATED).body(createdQuestion);
+        return ResponseEntity.status(CREATED).body(questionService.createQuestion(question));
     }
 
-    @PutMapping("/question/update/{id}")
-    public ResponseEntity<Question> updateQuestion(@PathVariable Long id,
-            @RequestBody Question question) throws ChangeSetPersister.NotFoundException {
-        Question updatedQuestion = questionService.updateQuestion(id, question);
-        return ResponseEntity.ok(updatedQuestion);
+    // Update an existing question
+    @PutMapping("/questions/{id}")
+    public ResponseEntity<Question> updateQuestion(@PathVariable Long id, @Valid @RequestBody Question question) {
+        return ResponseEntity.ok(questionService.updateQuestion(id, question));
     }
 
-    @GetMapping("/subjects")
-    public ResponseEntity<List<String>> getAllSubjects() {
-        List<String> subjects = questionService.getAllSubjects();
-        return ResponseEntity.ok(subjects);
-    }
-
-    @GetMapping("/fetch-questions-for-user")
-    public ResponseEntity<List<Question>> getQuestionsForUser(
-            @RequestParam Integer numOfQuestions, @RequestParam String subject) {
-        List<Question> allQuestions = questionService.getQuestionsForUser(numOfQuestions, subject);
-        List<Question> mutableQuestions = new ArrayList<>(allQuestions);
-        Collections.shuffle(mutableQuestions);
-
-        int availableQuestions = Math.min(numOfQuestions, mutableQuestions.size());
-        List<Question> randomQuestions = mutableQuestions.subList(0,
-                availableQuestions);
-
-        return ResponseEntity.ok(randomQuestions);
-    }
-
-    @DeleteMapping("/question/delete/{id}")
+    // Delete a question
+    @DeleteMapping("/questions/{id}")
     public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
         questionService.deleteQuestion(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // Fetch all subjects
+    @GetMapping("/subjects")
+    public ResponseEntity<List<String>> getAllSubjects() {
+        return ResponseEntity.ok(questionService.getAllSubjects());
+    }
+
+    // Fetch random questions for a user
+    @GetMapping("/questions/random")
+    public ResponseEntity<List<Question>> getQuestionsForUser(
+            @RequestParam Integer numOfQuestions, @RequestParam String subject) {
+        List<Question> questions = questionService.getQuestionsForUser(numOfQuestions, subject);
+        return ResponseEntity.ok(questions.subList(0, Math.min(numOfQuestions, questions.size())));
     }
 }
