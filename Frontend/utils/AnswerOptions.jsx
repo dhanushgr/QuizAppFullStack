@@ -1,62 +1,42 @@
-import React from "react"
+import React from "react";
 
 const AnswerOptions = ({ question, isChecked, handleAnswerChange, handleCheckboxChange }) => {
-	if (!question) {
+	if (!question || !question.choices || question.choices.length === 0) {
 		return (
 			<div>
-				No questions available, <br /> you may try agian by reducing your requested number of
-				questions on this topic
+				No answer options available. <br /> Try again by selecting fewer questions.
 			</div>
-		)
+		);
 	}
 
-	const { id, questionType, choices } = question
+	const { id, questionType, choices } = question;
+	const isSingleAnswer = questionType === "SINGLE_ANSWER";
+	const isMultipleAnswer = questionType === "MULTIPLE_ANSWER";
 
-	if (questionType === "single") {
-		return (
-			<div>
-				{choices.sort().map((choice, index) => (
-					<div key={choice} className="form-check mb-3">
-						<input
-							className="form-check-input"
-							type="radio"
-							id={choice}
-							name={question.id}
-							value={choice}
-							checked={isChecked(question.id, choice)}
-							onChange={() => handleAnswerChange(id, choice)}
-						/>
-						<label htmlFor={choice} className="form-check-label ms-2">
-							{choice}
-						</label>
-					</div>
-				))}
-			</div>
-		)
-	} else if (questionType === "multiple") {
-		return (
-			<div>
-				{choices.sort().map((choice, index) => (
-					<div key={choice} className="form-check mb-3">
-						<input
-							className="form-check-input"
-							type="checkbox"
-							id={choice}
-							name={question.id}
-							value={choice}
-							checked={isChecked(question.id, choice)}
-							onChange={() => handleCheckboxChange(id, choice)}
-						/>
-						<label htmlFor={choice} className="form-check-label ms-2">
-							{choice}
-						</label>
-					</div>
-				))}
-			</div>
-		)
-	} else {
-		return null
-	}
-}
+	return (
+		<div>
+			{choices.map((choice, index) => (
+				<div key={choice} className="form-check mb-3">
+					<input
+						className="form-check-input"
+						type={isSingleAnswer ? "radio" : "checkbox"}
+						id={`${id}-${index}`} // Unique ID for each option
+						name={`question-${id}`}
+						value={choice}
+						checked={isChecked(id, choice)}
+						onChange={() =>
+							isSingleAnswer
+								? handleAnswerChange(id, choice)
+								: handleCheckboxChange(id, choice)
+						}
+					/>
+					<label htmlFor={`${id}-${index}`} className="form-check-label ms-2">
+						{choice}
+					</label>
+				</div>
+			))}
+		</div>
+	);
+};
 
-export default AnswerOptions
+export default AnswerOptions;
