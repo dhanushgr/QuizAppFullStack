@@ -86,11 +86,11 @@ const Quiz = () => {
 				const correctOptions = Array.isArray(question.correctAnswers)
 					? question.correctAnswers.map((opt) => opt.charAt(0))
 					: [question.correctAnswers.charAt(0)];
-
+	
 				const isCorrect =
 					selectedOptions.length === correctOptions.length &&
 					selectedOptions.every((opt) => correctOptions.includes(opt));
-
+	
 				if (isCorrect) {
 					scores++;
 				}
@@ -99,7 +99,14 @@ const Quiz = () => {
 		setTotalScores(scores);
 		setSelectedAnswers([]);
 		setCurrentQuestionIndex(0);
-		navigate("/quiz-result", { state: { quizQuestions, totalScores: scores } });
+		navigate("/quiz-result", { 
+			state: { 
+				quizQuestions, 
+				totalScores: scores, 
+				selectedSubject, 
+				selectedNumQuestions 
+			} 
+		});
 	};
 
 	const handleNextQuestion = () => {
