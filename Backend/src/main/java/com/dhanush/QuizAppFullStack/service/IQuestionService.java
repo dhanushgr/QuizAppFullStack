@@ -1,6 +1,7 @@
 package com.dhanush.QuizAppFullStack.service;
 
 import com.dhanush.QuizAppFullStack.model.Question;
+import com.dhanush. QuizAppFullStack.exception.ResourceNotFoundException;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface IQuestionService {
 
     List<String> getAllSubjects();
 
-    Question updateQuestion(Long id, Question question) throws NotFoundException;
+    Question updateQuestion(Long id, Question question) throws ResourceNotFoundException;
 
     void deleteQuestion(Long id);
 

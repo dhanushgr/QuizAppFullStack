@@ -1,6 +1,7 @@
 package com.dhanush.QuizAppFullStack.repository;
 
 import com.dhanush.QuizAppFullStack.model.Question;
+import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
+@Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     /**

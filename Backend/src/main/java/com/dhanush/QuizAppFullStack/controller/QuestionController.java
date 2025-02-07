@@ -2,6 +2,8 @@ package com.dhanush.QuizAppFullStack.controller;
 
 import com.dhanush.QuizAppFullStack.model.Question;
 import com.dhanush.QuizAppFullStack.service.IQuestionService;
+import com.dhanush.QuizAppFullStack.exception.ResourceNotFoundException;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.CREATED;
-
 @RestController
 @RequestMapping("/api/quiz")
 @RequiredArgsConstructor
@@ -28,10 +30,9 @@ public class QuestionController {
 
     // Fetch a question by ID
     @GetMapping("/questions/{id}")
-    public ResponseEntity<Question> getQuestionById(@PathVariable Long id) {
-        Question question = questionService.getQuestionById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Question not found"));
-        return ResponseEntity.ok(question);
+    public Question getQuestion(@PathVariable Long id) {
+        return questionService.getQuestionById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Question not found with id: " + id));
     }
 
     // Create a new question
@@ -43,7 +44,11 @@ public class QuestionController {
     // Update an existing question
     @PutMapping("/questions/{id}")
     public ResponseEntity<Question> updateQuestion(@PathVariable Long id, @Valid @RequestBody Question question) {
-        return ResponseEntity.ok(questionService.updateQuestion(id, question));
+        try {
+            return ResponseEntity.ok(questionService.updateQuestion(id, question));
+        } catch (ResourceNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
     }
 
     // Delete a question
@@ -62,8 +67,10 @@ public class QuestionController {
     // Fetch random questions for a user
     @GetMapping("/questions/random")
     public ResponseEntity<List<Question>> getQuestionsForUser(
-            @RequestParam Integer numOfQuestions, @RequestParam String subject) {
-        List<Question> questions = questionService.getQuestionsForUser(numOfQuestions, subject);
+            @RequestParam Integer numOfQuestions,
+            @RequestParam String subjects) {
+        List<Question> questions =
+                questionService.getQuestionsForUser(numOfQuestions, subjects);
         return ResponseEntity.ok(questions.subList(0, Math.min(numOfQuestions, questions.size())));
     }
 }
