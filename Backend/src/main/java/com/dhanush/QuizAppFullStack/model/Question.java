@@ -13,6 +13,12 @@
  import lombok.Setter;
  
  import java.util.List;
+
+   // Inner enum for QuestionType
+    enum QuestionType {
+        SINGLE_ANSWER,  // Radio button type
+        MULTIPLE_ANSWER // Checkbox type
+    }
  
  @Getter
  @Setter
