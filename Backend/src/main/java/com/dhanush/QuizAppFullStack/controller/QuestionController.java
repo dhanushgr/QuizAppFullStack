@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
-
 import static org.springframework.http.HttpStatus.CREATED;
+
 @RestController
 @RequestMapping("/api/quiz")
 @RequiredArgsConstructor
@@ -69,8 +68,7 @@ public class QuestionController {
     public ResponseEntity<List<Question>> getQuestionsForUser(
             @RequestParam Integer numOfQuestions,
             @RequestParam String subjects) {
-        List<Question> questions =
-                questionService.getQuestionsForUser(numOfQuestions, subjects);
+        List<Question> questions = questionService.getQuestionsForUser(numOfQuestions, subjects);
         return ResponseEntity.ok(questions.subList(0, Math.min(numOfQuestions, questions.size())));
     }
 }

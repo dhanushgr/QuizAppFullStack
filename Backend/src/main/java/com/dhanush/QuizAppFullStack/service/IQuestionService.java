@@ -1,9 +1,7 @@
 package com.dhanush.QuizAppFullStack.service;
 
 import com.dhanush.QuizAppFullStack.model.Question;
-import com.dhanush. QuizAppFullStack.exception.ResourceNotFoundException;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
-
+import com.dhanush.QuizAppFullStack.exception.ResourceNotFoundException;
 import java.util.List;
 import java.util.Optional;
 

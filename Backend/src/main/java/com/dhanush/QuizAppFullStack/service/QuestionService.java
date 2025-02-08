@@ -4,7 +4,6 @@ import com.dhanush.QuizAppFullStack.model.Question;
 import com.dhanush.QuizAppFullStack.repository.QuestionRepository;
 import com.dhanush.QuizAppFullStack.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
