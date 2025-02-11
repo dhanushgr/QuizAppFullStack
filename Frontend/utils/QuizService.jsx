@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export const api = axios.create({
-	baseURL: "http://localhost:9192/api/quiz"
+	baseURL: `${import.meta.env.VITE_API_URL}/api/quiz`
 })
 
 export const createQuestion = async (quizQuestion) => {
