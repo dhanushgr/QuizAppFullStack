@@ -8,7 +8,7 @@ import QuizResult from "./components/quiz/QuizResult"
 import GetAllQuiz from "./components/quiz/GetAllQuiz"
 import AddQuestion from "./components/question/AddQuestion"
 import UpdateQuestion from "./components/question/UpdateQuestion"
-import Navbar from "./components/layout/NavBar"
+import Navbar from "./components/layout/navbar"
 import Admin from "./components/Admin"
 
 function App() {
